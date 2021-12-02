@@ -87,6 +87,27 @@ public class AudioDevice : NSObject{
         self.init(delegate:nil)
     }
     
+    public func initRecording() -> Bool {
+        guard let audioUnit = self.audioUnit, isAudioInitialized else {
+            if !initPlayOrRecord() {
+                logger.error("initRecording : initPlayOrRecord fail")
+                return false
+            }
+            return true
+        }
+        return true
+    }
+    
+    public func initPlayout() -> Bool {
+        guard let audioUnit = self.audioUnit, isAudioInitialized else {
+            if !initPlayOrRecord() {
+                logger.error("initPlayout : initPlayOrRecord fail")
+                return false
+            }
+            return true
+        }
+        return true
+    }
     
     public func initRecording(sampleRate: Float64) -> Bool {
         guard let audioUnit = self.audioUnit, isAudioInitialized else {
@@ -254,6 +275,23 @@ public class AudioDevice : NSObject{
         recordParameters.reset(sampleRate: sample_rate, channels: recordParameters.channels, duration: io_buf_duration)
         //print("playoutParameters.framesPerBuffer: \(playoutParameters.framesPerBuffer)")
         //update audio buffer
+    }
+    
+    public func initPlayOrRecord() -> Bool {
+        let audioUnit = VoiceProcessingUnit(delegate: self)
+        let session = AudioSession.shared
+        session.addDelegate(delegate: self)
+        isInterrupted = session.isInterrupted
+        session.beginSession()
+        setupAudioBuffersForActiveAudioSession()
+        if !audioUnit.initilize(sampleRate: session.preferredSampleRate) {
+            logger.error("fail to initialize VoiceProcessingUnit")
+            self.audioUnit = nil
+            return false
+        }
+        self.audioUnit = audioUnit
+        isAudioInitialized = true
+        return true
     }
     
     public func initPlayOrRecord(sampleRate: Float64) -> Bool {

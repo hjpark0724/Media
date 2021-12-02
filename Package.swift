@@ -3,7 +3,10 @@
 
 import PackageDescription
 var dependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/apple/swift-atomics.git", from: "0.0.1"),
+    .package(
+         url: "https://github.com/apple/swift-atomics.git",
+         .upToNextMajor(from: "1.0.0")
+       ),
     .package(name: "Logging", url: "file:///Users/hyeonjunpark/Desktop/Logging", branch: "main"),
     .package(name: "Utils", url: "file:///Users/hyeonjunpark/Desktop/Utils", branch: "main")
     ]

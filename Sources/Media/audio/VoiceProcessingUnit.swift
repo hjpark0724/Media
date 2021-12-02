@@ -123,7 +123,7 @@ class VoiceProcessingUnit {
             mBitsPerChannel: 8 * bytesPerSample, //16 bits
             mReserved: 0
         )
-        //logger.info("input sample rate: \(sampleRate)")
+        logger.info("input sample rate: \(sampleRate)")
         // 입력버스(마이크의 출력 설정)
         result = AudioUnitSetProperty(
             audioUnit!,
@@ -140,6 +140,7 @@ class VoiceProcessingUnit {
         }
         
         // 출력 버스 (스피커 출력 설정)
+        logger.info("output sample rate: \(sampleRate)")
         result = AudioUnitSetProperty(
             audioUnit!,
             kAudioUnitProperty_StreamFormat,
@@ -243,7 +244,7 @@ class VoiceProcessingUnit {
             }
         }
         */
-        //logger.info("AudioUnitInitialize")
+        logger.info("AudioUnitInitialize")
         state = .initialized
         return true
     }
@@ -283,7 +284,7 @@ class VoiceProcessingUnit {
             logger.error("Fail to uninitilize audio unit. Error=\(result)")
             return false
         }
-        //logger.info("AudioUnitUninitialize")
+        logger.info("AudioUnitUninitialize")
         state = .uninitialized
         return true
     }
@@ -300,7 +301,16 @@ class VoiceProcessingUnit {
             mBitsPerChannel: 8 * bytesPerSample, //16 bits
             mReserved: 0
         )
-        let result = AudioUnitSetProperty(
+        var curSampleRate: Float64 = 0
+        var size: UInt32 = 0
+        var result = AudioUnitGetProperty(audioUnit!, kAudioUnitProperty_SampleRate, kAudioUnitScope_Output, kInputBus, &curSampleRate, &size)
+        if result != noErr {
+            logger.error("get sample rate: kInputBus setting failed.\(result)")
+        } else {
+            logger.info("curSampleRate:\(curSampleRate)")
+        }
+        
+         result = AudioUnitSetProperty(
             audioUnit!,
             kAudioUnitProperty_StreamFormat,
             kAudioUnitScope_Output,

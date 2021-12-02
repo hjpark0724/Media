@@ -53,7 +53,6 @@ public class RTPAudioPacketGenerator {
 
 extension RTPAudioPacketGenerator : AudioDeviceDelegate {
     public func onDeliverRecordedData(data: Data) {
-        //logger.info("onDeliverRecordedData:\(data.count)")
         buffer.write(data.withUnsafeBytes{return $0})
         encodeQueue.async { [weak self] in
             guard let `self` = self else { return }
