@@ -48,7 +48,7 @@ public class AudioSession : NSObject {
     let activationCount = ManagedAtomic<Int>(0)
     let sessionCount = ManagedAtomic<Int>(0)
     var isInterrupted: Bool = false
-    let session: AVAudioSession
+   public let session: AVAudioSession
     let serialQueue = DispatchQueue(label: "com.RTCAudioSession")
     public static let shared = AudioSession()
     override convenience init() {
@@ -215,7 +215,7 @@ public class AudioSession : NSObject {
         return true
     }
     
-    func overrideOutputAudioPort(portOverride: AVAudioSession.PortOverride) -> Bool {
+    public func overrideOutputAudioPort(portOverride: AVAudioSession.PortOverride) -> Bool {
         do {
             try self.session.overrideOutputAudioPort(portOverride)
         } catch {
