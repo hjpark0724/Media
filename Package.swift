@@ -7,8 +7,8 @@ var dependencies: [Package.Dependency] = [
          url: "https://github.com/apple/swift-atomics.git",
          .upToNextMajor(from: "1.0.0")
        ),
-    .package(name: "Logging", url: "file:///Users/hyeonjunpark/Desktop/Logging", branch: "main"),
-    .package(name: "Utils", url: "file:///Users/hyeonjunpark/Desktop/Utils", branch: "main")
+    .package(name: "Logging", url: "https://github.com/hjpark0724/Logging.git", branch: "main"),
+    .package(name: "Utils", url: "https://github.com/hjpark0724/Utils.git", branch: "main")
     ]
 
 var targetDependencies :[Target.Dependency] = [
